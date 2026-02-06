@@ -79,7 +79,7 @@ async function handleLogout() {
   currentPostTags = []
   selectedTagId = null
   updateLoginUI()
-  renderSidebarTags()
+  renderRecentSidebar()
   displayPostsByTag()
   closeEditorPage()
 }

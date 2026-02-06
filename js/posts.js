@@ -1,6 +1,43 @@
 let selectedTagId = null
 
-// 删除旧的 renderList 和 renderEditor 函数，它们不再使用
+// ========== 左侧栏：最近更新的文章 ==========
+function renderRecentSidebar() {
+  const recentList = document.getElementById('recentList')
+  if (!recentList) return
+  recentList.innerHTML = ''
+
+  // 按更新时间排序（最近更新在上）
+  const sorted = [...posts].sort((a, b) =>
+    new Date(b.updated_at || b.created_at) - new Date(a.updated_at || a.created_at)
+  )
+
+  sorted.forEach(post => {
+    const btn = document.createElement('button')
+    btn.className = 'recent-item' + (post.id === currentId ? ' active' : '')
+
+    const title = document.createElement('span')
+    title.textContent = post.title || '（无标题）'
+
+    const time = document.createElement('span')
+    time.className = 'recent-item-time'
+    time.textContent = formatDate(post.updated_at || post.created_at)
+
+    btn.appendChild(title)
+    btn.appendChild(time)
+    btn.onclick = () => {
+      currentId = post.id
+      renderRecentSidebar()
+      // 在右侧显示这篇文章（如果在编辑页则打开编辑）
+      const editorPage = document.getElementById('editorPage')
+      if (editorPage && !editorPage.classList.contains('hidden')) {
+        openEditorPage(post.id)
+      }
+    }
+    recentList.appendChild(btn)
+  })
+}
+
+// ========== 右侧：文章卡片列表 ==========
 
 function renderPostsList(postsToRender) {
   const postsList = document.getElementById('postsList')
@@ -90,7 +127,8 @@ async function openEditorPage(postId) {
   
   await loadPostTags(postId)
   
-  document.getElementById('postsArea').classList.add('hidden')
+  // 隐藏所有 tab 页面，显示编辑页
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'))
   document.getElementById('editorPage').classList.remove('hidden')
 }
 
@@ -105,20 +143,21 @@ function closeEditorPage() {
 }
 
 function displayPostsByTag() {
-  let postsToDisplay = posts
+  let postsToDisplay = [...posts]
   
   if (selectedTagId) {
-    postsToDisplay = posts.filter(post => 
+    postsToDisplay = postsToDisplay.filter(post => 
       post.tags && post.tags.some(t => t.id === selectedTagId)
     )
   }
   
-  // 按更新时间从新到旧排序
+  // 文章 tab 默认按新建时间从新到旧排序
   postsToDisplay.sort((a, b) => 
-    new Date(b.updated_at || b.created_at) - new Date(a.updated_at || a.created_at)
+    new Date(b.created_at) - new Date(a.created_at)
   )
   
   renderPostsList(postsToDisplay)
+  renderRecentSidebar()
 }
 
 async function handleNewPost() {

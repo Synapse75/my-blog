@@ -10,6 +10,12 @@
 <!-- 顶部 Bar -->
 <div id="topBar" class="top-bar">
   <h1 class="logo">My Blog</h1>
+  <nav class="nav-links">
+    <a href="#" class="nav-link active" data-tab="posts">文章</a>
+    <a href="#" class="nav-link" data-tab="categories">分类</a>
+    <a href="#" class="nav-link" data-tab="tags">标签</a>
+    <a href="#" class="nav-link" data-tab="about">关于</a>
+  </nav>
   <div id="loginButtonContainer" class="login-button-container">
     <button id="loginBtn">登录</button>
   </div>
@@ -17,17 +23,22 @@
 
 <!-- 主要内容区域 -->
 <div id="mainContainer" class="main-container">
-  <!-- 左侧 Tag 栏 -->
+  <!-- 左侧栏：最近更新的文章 -->
   <div id="sidebar" class="sidebar">
-    <h3>标签</h3>
-    <div id="tagsList" class="tags-list"></div>
+    <h3>最近更新</h3>
+    <div id="recentList" class="recent-list"></div>
   </div>
 
   <!-- 右侧内容区域 -->
   <div id="contentArea" class="content-area">
     <!-- 文章列表页面 -->
-    <div id="postsArea" class="posts-area">
+    <div id="postsArea" class="posts-area tab-page">
       <div id="postsList" class="posts-list"></div>
+    </div>
+
+    <!-- 标签页面 -->
+    <div id="tagsPage" class="tags-page tab-page hidden">
+      <div id="tagsPageList" class="tags-page-list"></div>
     </div>
 
     <!-- 编辑页面 -->

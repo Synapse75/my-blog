@@ -1,14 +1,8 @@
 // js/ui.js
-const listEl = document.getElementById('list')
-const titleInput = document.getElementById('title')
-const contentInput = document.getElementById('content')
-const saveBtn = document.getElementById('saveBtn')
-const newBtn = document.getElementById('newBtn')
+const loginBtn = document.getElementById('loginBtn')
 const emailInput = document.getElementById('email')
 const passwordInput = document.getElementById('password')
-const loginBtn = document.getElementById('loginBtn')
 const confirmLoginBtn = document.getElementById('confirmLoginBtn')
-const logoutBtn = document.getElementById('logoutBtn')
 const loginModal = document.getElementById('loginModal')
 const closeLoginBtn = document.getElementById('closeLoginBtn')
 const goRegisterBtn = document.getElementById('goRegisterBtn')
@@ -22,11 +16,20 @@ const closeRegisterBtn = document.getElementById('closeRegisterBtn')
 const goLoginBtn = document.getElementById('goLoginBtn')
 
 const tagInput = document.getElementById('tagInput')
+const saveBtn = document.getElementById('saveBtn')
+const newBtn = document.getElementById('newBtn')
 const backBtn = document.getElementById('backBtn')
-const logoutBtn2 = document.getElementById('logoutBtn2')
 
 // 等待 DOM 完全加载后再绑定事件
 document.addEventListener('DOMContentLoaded', () => {
+  // ========== 顶部导航 Tab 切换 ==========
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.onclick = (e) => {
+      e.preventDefault()
+      switchTab(link.dataset.tab)
+    }
+  })
+
   // ========== 认证事件绑定 ==========
   if (loginBtn) {
     loginBtn.onclick = () => {
@@ -81,6 +84,36 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeApp()
 })
 
+// Tab 切换函数
+function switchTab(tab) {
+  // 更新导航高亮
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'))
+  const activeLink = document.querySelector(`.nav-link[data-tab="${tab}"]`)
+  if (activeLink) activeLink.classList.add('active')
+
+  // 隐藏所有 tab 页面
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'))
+  // 也隐藏编辑页
+  const editorPage = document.getElementById('editorPage')
+  if (editorPage) editorPage.classList.add('hidden')
+
+  // 显示对应页面
+  switch (tab) {
+    case 'posts':
+      document.getElementById('postsArea').classList.remove('hidden')
+      displayPostsByTag()
+      break
+    case 'tags':
+      document.getElementById('tagsPage').classList.remove('hidden')
+      renderTagsPage()
+      break
+    case 'categories':
+    case 'about':
+      // 未来实现
+      break
+  }
+}
+
 // 初始化应用的异步函数
 async function initializeApp() {
   try {
@@ -96,7 +129,6 @@ async function initializeApp() {
     updateLoginUI()
   } catch (err) {
     console.error('初始化错误:', err)
-    await loadAllTags()
     displayPostsByTag()
     updateLoginUI()
   }
