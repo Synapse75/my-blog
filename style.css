@@ -629,6 +629,42 @@ body {
   background: #f0f0f0;
 }
 
+.github-oauth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #24292e !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.github-oauth-btn:hover {
+  background: #1b1f23 !important;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #999;
+  font-size: 13px;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
 .modal-content p {
   margin: 12px 0;
   color: #666;

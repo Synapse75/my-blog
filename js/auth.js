@@ -2,14 +2,20 @@
 let isLoggedIn = false
 let currentUser = null
 
+// 获取当前用户的显示名称
+function getDisplayName() {
+  if (!currentUser) return ''
+  const meta = currentUser.user_metadata || {}
+  return meta.user_name || meta.preferred_username || meta.username || '用户'
+}
+
 function updateLoginUI() {
   const loginBtn = document.getElementById('loginBtn')
   const logoutBtn = document.getElementById('logoutBtn')
   if (!loginBtn) return
 
   if (isLoggedIn && currentUser) {
-    const name = currentUser.user_metadata?.username || currentUser.email?.split('@')[0] || '用户'
-    loginBtn.textContent = name
+    loginBtn.textContent = getDisplayName()
     loginBtn.disabled = true
     if (logoutBtn) logoutBtn.classList.remove('hidden')
   } else {
@@ -25,53 +31,38 @@ function openLoginModal() {
 
 function closeLoginModal() {
   document.getElementById('loginModal').classList.add('hidden')
-  document.getElementById('loginEmail').value = ''
-  document.getElementById('loginPassword').value = ''
+  const usernameInput = document.getElementById('loginUsername')
+  if (usernameInput) usernameInput.value = ''
 }
 
-function openRegisterModal() {
-  document.getElementById('registerModal').classList.remove('hidden')
+async function handleGitHubLogin() {
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'github',
+    options: {
+      redirectTo: window.location.origin + window.location.pathname
+    }
+  })
+  if (error) alert(error.message)
 }
 
-function closeRegisterModal() {
-  document.getElementById('registerModal').classList.add('hidden')
-  document.getElementById('regUsername').value = ''
-  document.getElementById('regEmail').value = ''
-  document.getElementById('regPassword').value = ''
-}
+async function handleUsernameLogin() {
+  const input = document.getElementById('loginUsername')
+  const username = input.value.trim()
+  if (!username) return alert('请输入用户名')
 
-async function handleLogin() {
-  const email = document.getElementById('loginEmail').value
-  const password = document.getElementById('loginPassword').value
-  if (!email || !password) return alert('请输入邮箱和密码')
+  // 使用 Supabase 匿名登录，然后设置用户名
+  const { data, error } = await sb.auth.signInAnonymously()
+  if (error) return alert('登录失败: ' + error.message)
 
-  const { data, error } = await sb.auth.signInWithPassword({ email, password })
-  if (error) return alert(error.message)
+  // 将用户名写入 user_metadata
+  await sb.auth.updateUser({ data: { username } })
 
   currentUser = data.user
+  currentUser.user_metadata = { ...currentUser.user_metadata, username }
   isLoggedIn = true
   updateLoginUI()
   closeLoginModal()
-  // 刷新当前文章详情的互动区域
   refreshInteractions()
-}
-
-async function handleRegister() {
-  const username = document.getElementById('regUsername').value
-  const email = document.getElementById('regEmail').value
-  const password = document.getElementById('regPassword').value
-  if (!username || !email || !password) return alert('请填写所有字段')
-
-  const { data, error } = await sb.auth.signUp({
-    email,
-    password,
-    options: { data: { username } }
-  })
-  if (error) return alert(error.message)
-
-  alert('注册成功！请查收邮件验证您的邮箱地址。')
-  closeRegisterModal()
-  openLoginModal()
 }
 
 async function handleLogout() {

@@ -66,7 +66,7 @@ async function submitComment(postId) {
   const content = input.value.trim()
   if (!content) return
 
-  const username = currentUser.user_metadata?.username || currentUser.email?.split('@')[0] || '匿名'
+  const username = getDisplayName()
 
   const { error } = await sb
     .from('comments')
