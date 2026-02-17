@@ -3,21 +3,35 @@
 // ========== 加载 GitHub 信息 ==========
 async function loadGitHubStats() {
   try {
+    // 检查 localStorage 缓存（1小时有效）
+    const cached = localStorage.getItem('githubStats')
+    if (cached) {
+      const { data, time } = JSON.parse(cached)
+      if (Date.now() - time < 3600000) {
+        document.getElementById('githubFollowing').textContent = data.following
+        document.getElementById('githubFollowers').textContent = data.followers
+        document.getElementById('githubRepos').textContent = data.repos
+        return
+      }
+    }
+
     const res = await fetch('https://api.github.com/users/synapse75')
     if (!res.ok) throw new Error('Failed to fetch')
 
-    const data = await res.json()
-    document.getElementById('githubStars').textContent = '0'
-    document.getElementById('githubFollowers').textContent = data.followers || 0
-    document.getElementById('githubRepos').textContent = data.public_repos || 0
+    const userData = await res.json()
 
-    // 统计 Stars
-    const reposRes = await fetch('https://api.github.com/users/synapse75/repos?per_page=100')
-    if (reposRes.ok) {
-      const repos = await reposRes.json()
-      const stars = repos.reduce((s, r) => s + (r.stargazers_count || 0), 0)
-      document.getElementById('githubStars').textContent = stars
+    const statsData = {
+      following: userData.following || 0,
+      followers: userData.followers || 0,
+      repos: userData.public_repos || 0
     }
+
+    document.getElementById('githubFollowing').textContent = statsData.following
+    document.getElementById('githubFollowers').textContent = statsData.followers
+    document.getElementById('githubRepos').textContent = statsData.repos
+
+    // 缓存到 localStorage
+    localStorage.setItem('githubStats', JSON.stringify({ data: statsData, time: Date.now() }))
   } catch (e) {
     console.error('加载 GitHub 信息失败:', e)
   }
