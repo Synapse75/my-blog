@@ -272,6 +272,14 @@ body {
     gap: 4px;
   }
 
+  .post-detail-category {
+    padding: 4px 8px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    font-weight: 500;
+    color: #666;
+  }
+
   .post-detail-tags {
     display: flex;
     gap: 8px;
@@ -346,6 +354,18 @@ body {
 .post-card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
+}
+
+.post-card-category {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.post-card-category:hover {
+  color: #666;
 }
 
 .post-card-header {

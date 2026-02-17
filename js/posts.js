@@ -46,6 +46,19 @@ function renderPostsList(postsToRender) {
     card.style.cursor = 'pointer'
     card.onclick = () => navigateTo(getPostHash(post))
     
+    // 分类标签（位于标题上方，灰色小字）
+    if (post.category) {
+      const categoryLabel = document.createElement('div')
+      categoryLabel.className = 'post-card-category'
+      categoryLabel.textContent = post.category
+      categoryLabel.style.cursor = 'pointer'
+      categoryLabel.onclick = (e) => {
+        e.stopPropagation()
+        navigateTo('#/category/' + encodeURIComponent(post.category))
+      }
+      card.appendChild(categoryLabel)
+    }
+    
     const header = document.createElement('div')
     header.className = 'post-card-header'
     
@@ -66,23 +79,11 @@ function renderPostsList(postsToRender) {
     content.textContent = post.excerpt || ''
     card.appendChild(content)
     
-    // 标签 + 分类
-    const metaRow = document.createElement('div')
-    metaRow.className = 'post-card-tags'
-    
-    if (post.category) {
-      const catEl = document.createElement('span')
-      catEl.className = 'post-card-tag'
-      catEl.textContent = '📂 ' + post.category
-      catEl.style.cursor = 'pointer'
-      catEl.onclick = (e) => {
-        e.stopPropagation()
-        navigateTo('#/category/' + encodeURIComponent(post.category))
-      }
-      metaRow.appendChild(catEl)
-    }
-    
+    // 标签（不包含分类）
     if (post.tags && post.tags.length > 0) {
+      const metaRow = document.createElement('div')
+      metaRow.className = 'post-card-tags'
+      
       post.tags.forEach(tag => {
         const tagEl = document.createElement('span')
         tagEl.className = 'post-card-tag'
@@ -94,9 +95,7 @@ function renderPostsList(postsToRender) {
         }
         metaRow.appendChild(tagEl)
       })
-    }
-    
-    if (metaRow.children.length > 0) {
+      
       card.appendChild(metaRow)
     }
     
@@ -151,16 +150,16 @@ function showPostDetail(post) {
   
   // 分类
   if (post.category) {
-    metaItems.push(`<div class="post-detail-meta-item">📂 ${escapeHtml(post.category)}</div>`)
+    metaItems.push(`<div class="post-detail-meta-item post-detail-category">${escapeHtml(post.category)}</div>`)
   }
   
   // 创建日期
   const createdDate = new Date(post.created_at).toLocaleDateString('zh-CN')
-  metaItems.push(`<div class="post-detail-meta-item">📅 ${createdDate}</div>`)
+  metaItems.push(`<div class="post-detail-meta-item">创建于 ${createdDate}</div>`)
   
   // 更新时间
   const updateTime = new Date(post.updated_at).toLocaleString('zh-CN')
-  metaItems.push(`<div class="post-detail-meta-item">🕒 更新于 ${updateTime}</div>`)
+  metaItems.push(`<div class="post-detail-meta-item">更新于 ${updateTime}</div>`)
   
   // 标签
   let tagsHtml = ''
@@ -230,7 +229,7 @@ function renderCategoriesPage() {
 
     const name = document.createElement('span')
     name.className = 'tags-page-item-name'
-    name.textContent = '📂 ' + cat
+    name.textContent = cat
 
     const countEl = document.createElement('span')
     countEl.className = 'tags-page-item-count'

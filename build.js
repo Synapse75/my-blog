@@ -186,14 +186,14 @@ function buildIndex() {
   const tagSet = new Set()
   posts.forEach(p => (p.tags || []).forEach(t => tagSet.add(t)))
 
-  console.log(`✅ 已生成 posts/index.json`)
-  console.log(`   📝 ${posts.length} 篇文章`)
-  if (categories.length) console.log(`   📂 分类: ${categories.join(', ')}`)
-  if (tagSet.size) console.log(`   🏷️  标签: ${[...tagSet].join(', ')}`)
+  console.log(`已生成 posts/index.json`)
+  console.log(`   ${posts.length} 篇文章`)
+  if (categories.length) console.log(`   分类: ${categories.join(', ')}`)
+  if (tagSet.size) console.log(`   标签: ${[...tagSet].join(', ')}`)
 
   const recent = [...posts].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
   if (recent.length > 0) {
-    console.log(`   🕒 最近更新: ${recent[0].title} (${new Date(recent[0].updated_at).toLocaleString()})`)
+    console.log(`   最近更新: ${recent[0].title} (${new Date(recent[0].updated_at).toLocaleString()})`)
   }
 }
 

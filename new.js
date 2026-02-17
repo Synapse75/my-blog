@@ -42,7 +42,7 @@ for (let i = 0; i < args.length; i++) {
 }
 
 if (!title) {
-  console.error('❌ 请提供文章标题')
+  console.error('请提供文章标题')
   process.exit(1)
 }
 
@@ -68,7 +68,7 @@ if (!fs.existsSync(targetDir)) {
 const filePath = path.join(targetDir, fileName)
 
 if (fs.existsSync(filePath)) {
-  console.error(`❌ 文件已存在: ${path.relative(POSTS_DIR, filePath)}`)
+  console.error(`文件已存在: ${path.relative(POSTS_DIR, filePath)}`)
   process.exit(1)
 }
 
@@ -87,8 +87,8 @@ content += `# ${title}\n\n`
 fs.writeFileSync(filePath, content, 'utf-8')
 
 const relPath = path.relative(POSTS_DIR, filePath).replace(/\\/g, '/')
-console.log(`✅ 已创建: posts/${relPath}`)
-if (category) console.log(`   📂 分类: ${category}`)
-if (tags.length) console.log(`   🏷️  标签: ${tags.join(', ')}`)
-console.log(`\n📝 打开文件直接在 # ${title} 下面写正文`)
+console.log(`已创建: posts/${relPath}`)
+if (category) console.log(`   分类: ${category}`)
+if (tags.length) console.log(`   标签: ${tags.join(', ')}`)
+console.log(`\n打开文件直接在 # ${title} 下面写正文`)
 console.log(`   写完后运行 node build.js`)
