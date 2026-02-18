@@ -1,0 +1,48 @@
+# 自动构建 posts/index.json 并部署到 GitHub Pages
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'posts/**'
+      - 'build.js'
+      - 'src/**'
+      - 'package.json'
+
+  # 允许手动触发
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # build.js 需要 git log
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build index.json
+        run: node build.js
+
+      - name: Build React components
+        run: npx vite build
+
+      - name: Commit built files if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts/index.json dist/
+          git diff --cached --quiet || git commit -m "chore: auto-build index.json + React bundle"
+          git push

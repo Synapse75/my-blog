@@ -2,6 +2,9 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Synapse75 的个人博客 - 记录技术、生活与思考" />
+  <link rel="icon" href="https://github.com/synapse75.png" type="image/png" />
   <title>Blog</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -16,6 +19,7 @@
     <a href="#" class="nav-link" data-tab="tags">标签</a>
     <a href="#" class="nav-link" data-tab="about">关于</a>
   </nav>
+  <div id="react-search"></div>
   <div class="login-button-container">
     <button id="loginBtn">登录</button>
     <button id="logoutBtn" class="hidden">退出</button>
@@ -95,11 +99,7 @@
 
     <!-- 关于页面 -->
     <div id="aboutPage" class="tab-page hidden">
-      <div class="about-content" style="padding: 20px; color: #ccc;">
-        <h2>关于</h2>
-        <p>这是一个使用 Markdown + GitHub Pages 搭建的纯静态博客。</p>
-        <p>文章全部以本地 Markdown 文件编写，通过构建脚本生成索引。</p>
-      </div>
+      <div id="aboutContent" class="about-content markdown-body" style="padding: 20px;"></div>
     </div>
   </div>
 </div>
@@ -113,6 +113,7 @@
 <script src="js/posts.js"></script>
 <script src="js/router.js"></script>
 <script src="js/ui.js"></script>
+<script src="dist/blog-react.iife.js"></script>
 
 </body>
 </html>

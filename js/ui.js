@@ -37,6 +37,21 @@ async function loadGitHubStats() {
   }
 }
 
+// ========== 加载关于页面 ==========
+async function loadAboutPage() {
+  const container = document.getElementById('aboutContent')
+  if (!container || container.dataset.loaded) return
+  try {
+    const res = await fetch('about.md?t=' + Date.now())
+    if (!res.ok) throw new Error('Fetch failed')
+    const md = await res.text()
+    container.innerHTML = marked.parse(md)
+    container.dataset.loaded = 'true'
+  } catch (e) {
+    container.innerHTML = '<p>加载关于页面失败</p>'
+  }
+}
+
 // ========== Tab 切换 ==========
 function switchTab(tab) {
   // 导航高亮
@@ -65,6 +80,7 @@ function switchTab(tab) {
       break
     case 'about':
       document.getElementById('aboutPage').classList.remove('hidden')
+      loadAboutPage()
       break
   }
 }

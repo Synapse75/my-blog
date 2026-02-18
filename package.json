@@ -1,0 +1,35 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build.js",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "build:posts": "node build.js",
+    "build:all": "node build.js && vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Synapse75/blog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Synapse75/blog/issues"
+  },
+  "homepage": "https://github.com/Synapse75/blog#readme",
+  "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  }
+}

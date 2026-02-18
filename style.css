@@ -68,6 +68,71 @@ body {
   gap: 8px;
 }
 
+/* ========== 搜索框 ========== */
+.search-container {
+  position: relative;
+  flex: 0 0 200px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-container input:focus {
+  border-color: #1890ff;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.search-result-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background 0.15s;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover,
+.search-result-item.active {
+  background: #f0f7ff;
+}
+
+.search-result-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.search-result-excerpt {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .login-button-container button {
   padding: 8px 16px;
   border: 1px solid #ddd;
@@ -328,6 +393,50 @@ body {
     padding: 20px;
 }
 
+/* ========== 移动端响应式 ========== */
+@media (max-width: 1024px) {
+  .sidebar {
+    display: none;
+  }
+  .content-area {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    gap: 8px;
+  }
+  .nav-links {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .nav-link {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+  .search-container {
+    flex: 1 1 120px;
+    order: 2;
+  }
+  .login-button-container {
+    order: 2;
+  }
+  .content-area {
+    padding: 12px;
+  }
+  .post-detail-title {
+    font-size: 22px !important;
+  }
+  .post-detail-content {
+    font-size: 15px !important;
+  }
+}
+
 .posts-area {
   flex: 1;
   padding: 16px;
@@ -430,134 +539,6 @@ body {
 }
 
 .post-card-footer button:hover {
-  background: #f0f0f0;
-}
-
-/* ========== 编辑页面 ========== */
-.editor-page {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.editor-page.hidden {
-  display: none;
-}
-
-.editor-header {
-  padding: 16px;
-  border-bottom: 1px solid #ddd;
-  background: white;
-}
-
-.back-btn {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-
-.back-btn:hover {
-  background: #f0f0f0;
-}
-
-.editor-content {
-  flex: 1;
-  padding: 16px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-#title {
-  padding: 12px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-weight: bold;
-}
-
-#content {
-  flex: 1;
-  padding: 12px;
-  font-size: 14px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  resize: none;
-  font-family: monospace;
-}
-
-.tags-area {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: #fafafa;
-  flex-wrap: wrap;
-}
-
-.tag-input {
-  flex: 0 0 200px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.tags-list-editor {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  flex: 1;
-}
-
-.tag-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: #e0e0e0;
-  border-radius: 20px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.tag-badge:hover {
-  background: #d0d0d0;
-}
-
-.tag-badge.active {
-  background: #1890ff;
-  color: white;
-}
-
-.editor-footer {
-  padding: 16px;
-  border-top: 1px solid #ddd;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  background: white;
-}
-
-.editor-footer button {
-  padding: 10px 16px;
-  border: 1px solid #ddd;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-
-.editor-footer button:hover {
   background: #f0f0f0;
 }
 
