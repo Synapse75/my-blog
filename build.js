@@ -6,7 +6,7 @@
 //   - slug = front matter 里指定，或从文件名自动生成
 //   - tags = front matter 里指定（可选）
 //   - created_at = git 首次提交时间，回退到文件 birthtime
-//   - updated_at = 文件修改时间（mtime）
+//   - updated_at = git 最后提交时间，回退到 created_at
 //   - 文件名随便取，不影响 URL
 
 const fs = require('fs')
@@ -94,6 +94,17 @@ function getGitCreatedDate(filePath) {
   return null
 }
 
+function getGitUpdatedDate(filePath) {
+  try {
+    const result = execSync(
+      `git log -1 --format=%aI -- "${filePath}"`,
+      { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
+    ).trim()
+    if (result) return result
+  } catch (e) { /* git not available */ }
+  return null
+}
+
 // ========== 递归扫描 MD 文件 ==========
 function scanPosts(dir, category = '') {
   const entries = fs.readdirSync(dir, { withFileTypes: true })
@@ -146,7 +157,9 @@ function buildIndex() {
     // 日期：git 首次提交 → 文件创建时间
     const gitCreated = getGitCreatedDate(filePath)
     const createdAt = gitCreated || stat.birthtime.toISOString()
-    const updatedAt = stat.mtime.toISOString()
+    // 更新时间：git 最后提交 → 回退到 createdAt
+    const gitUpdated = getGitUpdatedDate(filePath)
+    const updatedAt = gitUpdated || createdAt
 
     // 获取 created 的日期部分 YYYY-MM-DD
     const dateStr = createdAt.slice(0, 10)
