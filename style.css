@@ -676,6 +676,51 @@ body {
   gap: 12px;
 }
 
+/* ========== 分类页面网格 ========== */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.category-card {
+  aspect-ratio: 1.618 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.category-card:hover {
+  background: #e8f0fe;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.category-card-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.category-card-count {
+  font-size: 13px;
+  color: #999;
+}
+
+@media (max-width: 600px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .tags-page-item {
   display: flex;
   align-items: center;

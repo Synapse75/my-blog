@@ -19,12 +19,7 @@ function renderRecentSidebar() {
     const title = document.createElement('span')
     title.textContent = post.title || '（无标题）'
 
-    const time = document.createElement('span')
-    time.className = 'recent-item-time'
-    time.textContent = formatDate(post.updated_at)
-
     btn.appendChild(title)
-    btn.appendChild(time)
     btn.onclick = () => navigateTo(getPostHash(post))
     recentList.appendChild(btn)
   })
@@ -214,27 +209,32 @@ function renderCategoriesPage() {
   const container = document.getElementById('categoriesPageList')
   if (!container) return
   container.innerHTML = ''
+  container.className = 'categories-grid'
 
   if (allCategories.length === 0) {
     container.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">暂无分类</p>'
     return
   }
 
-  allCategories.forEach(cat => {
-    const count = localPosts.filter(p => p.category === cat).length
+  // 按文章数量从大到小排列
+  const sorted = allCategories
+    .map(cat => ({ name: cat, count: localPosts.filter(p => p.category === cat).length }))
+    .sort((a, b) => b.count - a.count)
+
+  sorted.forEach(({ name: cat, count }) => {
     const el = document.createElement('div')
-    el.className = 'tags-page-item'
+    el.className = 'category-card'
     el.onclick = () => navigateTo('#/category/' + encodeURIComponent(cat))
 
-    const name = document.createElement('span')
-    name.className = 'tags-page-item-name'
-    name.textContent = cat
+    const nameEl = document.createElement('div')
+    nameEl.className = 'category-card-name'
+    nameEl.textContent = cat
 
-    const countEl = document.createElement('span')
-    countEl.className = 'tags-page-item-count'
+    const countEl = document.createElement('div')
+    countEl.className = 'category-card-count'
     countEl.textContent = count + ' 篇文章'
 
-    el.appendChild(name)
+    el.appendChild(nameEl)
     el.appendChild(countEl)
     container.appendChild(el)
   })
